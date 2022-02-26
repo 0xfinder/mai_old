@@ -1,7 +1,11 @@
 {
+  "name": "mai",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/0xfinder/mai.git",
+  "author": "0xfinder <49021865+0xfinder@users.noreply.github.com>",
+  "license": "MIT",
   "dependencies": {
-    "dotenv": "^16.0.0",
-    "revolt.js": "^5.2.8"
-  },
-  "type": "module"
+    "nodemon": "^2.0.15"
+  }
 }
