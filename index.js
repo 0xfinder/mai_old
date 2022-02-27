@@ -1,17 +1,18 @@
-import { Client } from "revolt.js";
-import dotenv from "dotenv";
-dotenv.config();
+const Discord = require('discord.js');
 
-let client = new Client();
+// Load dotenv config
+require('dotenv').config();
 
-client.on("ready", async () =>
-    console.info(`Logged in as ${client.user.username}!`),
-);
+// Create client
+const client = new Discord.Client({ intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS'] });
+client.mongoose = require('./src/utils/mongoose');
+client.commands = new Discord.Collection();
 
-client.on("message", async (message) => {
-    if (message.content === "hello") {
-        message.channel.sendMessage("world");
-    }
-});
+// Load handlers
+["command", "event"].forEach(event => require(`./src/handlers/${event}`)(client));
 
-client.loginBot(process.env.token);
+// Login to Discord with token
+client.login(process.env.token);
+
+// Initialize mongoose
+client.mongoose.init();
