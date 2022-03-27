@@ -7,6 +7,28 @@ dotenv.config();
 
 const { ALCHEMY_API_KEY } = process.env;
 
+type TransferEvent = {
+  address: string;
+  blockNumber: number;
+  transactionHash: string;
+  transactionIndex: number;
+  blockHash: string;
+  logIndex: number;
+  removed: boolean;
+  id: string;
+  returnValues: {
+    from: string;
+    to: string;
+    tokenId: string;
+  };
+  event: string;
+  signature: string;
+  raw: {
+    data: string;
+    topics: string[];
+  };
+};
+
 export class Alchemy {
   web3: AlchemyWeb3 = createAlchemyWeb3(
     `wss://eth-mainnet.ws.alchemyapi.io/ws/${ALCHEMY_API_KEY}`,
@@ -22,25 +44,19 @@ export class Alchemy {
   // as AlchemyWeb3["eth"]["Contract"]
   contract = new this.web3.eth.Contract(abi as AbiItem[], this.contractAddress);
 
+  transferCallback = async (event: TransferEvent) => {
+    log.info(event);
+  };
+
   init = () => {
-    log.info("Initializing Alchemy");
-    this.contract.events.Transfer(async (err: any, event: any) => {
+    log.info("Adding contract event listener");
+    this.contract.events.Transfer(async (err: any, event: TransferEvent) => {
       if (err) {
         console.error(err);
         return;
       }
 
-      console.log("Transfer");
-      console.log(event);
+      await this.transferCallback(event);
     });
   };
-  //   log.info("Adding contract event listener");
-  //   contract.events.allEvents(async (err: any, event: any) => {
-  //     if (err) {
-  //       console.error(err);
-  //       return;
-  //     }
-
-  //     console.log("All events", event);
-  //   });
 }
