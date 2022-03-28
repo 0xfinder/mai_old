@@ -13,5 +13,5 @@ export const client = new Client({
 client.login(TOKEN);
 
 ["command", "event"].forEach(handler => {
-  require(`./handlers/${handler}`)(client)       ;
+  require(`./handlers/${handler}`)(client)             ;
 });
