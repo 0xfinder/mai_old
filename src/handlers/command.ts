@@ -3,9 +3,7 @@ import { CustomClient } from "../types";
 
 module.exports = (client: CustomClient) => {
     readdirSync("./src/commands/").forEach((dir) => {
-        const commands = readdirSync(`./src/commands/${dir}/`).filter((file) =>
-            file.endsWith(".ts"),
-        );
+        const commands = readdirSync(`./src/commands/${dir}/`).filter((file) => file.endsWith(".ts"));
 
         for (const file of commands) {
             const pull = require(`../commands/${dir}/${file}`);

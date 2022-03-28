@@ -1,6 +1,6 @@
 import { AlchemyWeb3, createAlchemyWeb3 } from "@alch/alchemy-web3";
 import { AbiItem } from "web3-utils";
-import { log } from "./logger";
+import { Logger } from "tslog";
 import abi from "./erc721abi.json";
 import dotenv from "dotenv";
 import { CustomClient } from "../types";
@@ -10,26 +10,28 @@ dotenv.config();
 
 const { ALCHEMY_API_KEY, DISCORD_WEBHOOK_URL } = process.env;
 
+const log: Logger = new Logger();
+
 type TransferEvent = {
-  address: string;
-  blockNumber: number;
-  transactionHash: string;
-  transactionIndex: number;
-  blockHash: string;
-  logIndex: number;
-  removed: boolean;
-  id: string;
-  returnValues: {
-    from: string;
-    to: string;
-    tokenId: string;
-  };
-  event: string;
-  signature: string;
-  raw: {
-    data: string;
-    topics: string[];
-  };
+    address: string;
+    blockNumber: number;
+    transactionHash: string;
+    // transactionIndex: number;
+    blockHash: string;
+    // logIndex: number;
+    removed: boolean;
+    id: string;
+    returnValues: {
+        from: string;
+        to: string;
+        tokenId: string;
+    };
+    event: string;
+    signature: string;
+    // raw: {
+    //   data: string;
+    //   topics: string[];
+    // };
 };
 
 // type Transaction = {
@@ -60,61 +62,58 @@ type TransferEvent = {
 // };
 
 export class Alchemy {
-  client: CustomClient = client;
+    client: CustomClient = client;
 
-  web3: AlchemyWeb3 = createAlchemyWeb3(
-    `wss://eth-mainnet.ws.alchemyapi.io/ws/${ALCHEMY_API_KEY}`,
-    {
-      retryInterval: 1000,
-      maxRetries: 25,
-    }
-  );
-
-  // Milady token address
-  contractAddress: string = "0x5af0d9827e0c53e4799bb226655a1de152a425a5";
-  contract = new this.web3.eth.Contract(abi as AbiItem[], this.contractAddress);
-
-  transferCallback = async (event: TransferEvent) => {
-    log.info("Event: ", event);
-    log.info("Getting transaction");
-    const tx = await this.web3.eth.getTransaction(event.transactionHash);
-    log.info("Transaction: ", tx);
-    const data = JSON.stringify({
-      embeds: [
-        {
-          title: "Transfer",
-          description: `${event.returnValues.from} transferred ${
-            event.returnValues.tokenId
-          } to ${event.returnValues.to} **[${Number(tx.value) / 1e18} ETH]**`,
-          color: 16757575,
-        },
-      ],
+    web3: AlchemyWeb3 = createAlchemyWeb3(`wss://eth-mainnet.ws.alchemyapi.io/ws/${ALCHEMY_API_KEY}`, {
+        retryInterval: 1000,
+        maxRetries: 25,
     });
-    const config: AxiosRequestConfig = {
-      method: "POST",
-      url: DISCORD_WEBHOOK_URL,
-      headers: { "Content-Type": "application/json" },
-      data: data,
-    };
 
-    await axios(config);
-    // .then(response => {
-    //   console.log("Webhook delivered successfully");
-    // });
-    // await axios.post(
-    //   `${DISCORD_WEBHOOK_URL}`,
-    //   {
-    //     //DISCORD_WEBHOOK_URL as string, {
+    // Milady token address
+    contractAddress: string = "0x5af0d9827e0c53e4799bb226655a1de152a425a5";
+    contract = new this.web3.eth.Contract(abi as AbiItem[], this.contractAddress);
 
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     data: data,
-    //   }
-    // );
-    log.info("Getting transaction receipt");
-    /*
+    transferCallback = async (event: TransferEvent) => {
+        log.info("Event: ", event);
+        log.info("Getting transaction");
+        const tx = await this.web3.eth.getTransaction(event.transactionHash);
+        log.info("Transaction: ", tx);
+        const data = JSON.stringify({
+            embeds: [
+                {
+                    title: "Transfer",
+                    description: `${event.returnValues.from} transferred ${event.returnValues.tokenId} to ${
+                        event.returnValues.to
+                    } **[${Number(tx.value) / 1e18} ETH]**`,
+                    color: 16757575,
+                },
+            ],
+        });
+        const config: AxiosRequestConfig = {
+            method: "POST",
+            url: DISCORD_WEBHOOK_URL,
+            headers: { "Content-Type": "application/json" },
+            data: data,
+        };
+
+        await axios(config);
+        // .then(response => {
+        //   console.log("Webhook delivered successfully");
+        // });
+        // await axios.post(
+        //   `${DISCORD_WEBHOOK_URL}`,
+        //   {
+        //     //DISCORD_WEBHOOK_URL as string, {
+
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //     data: data,
+        //   }
+        // );
+        log.info("Getting transaction receipt");
+        /*
     {
   blockHash: '0x57e8beffdcdd0251badeb41088a8c2456da7258a73146890a5767202b56f5356',
   blockNumber: 14469151,
@@ -184,55 +183,50 @@ export class Alchemy {
   type: '0x2'
 }
     */
-    const txReceipt = await this.web3.eth.getTransactionReceipt(
-      event.transactionHash
-    );
-    log.info("Transaction receipt: ", txReceipt);
-  };
+        const txReceipt = await this.web3.eth.getTransactionReceipt(event.transactionHash);
+        log.info("Transaction receipt: ", txReceipt);
+    };
 
-  event = {
-    address: "0x5Af0D9827E0c53E4799BB226655A1de152A425a5",
-    blockNumber: 14469305,
-    transactionHash:
-      "0xcda8f36033e4412a64ef6ff6caa40c4df3795e385ff342d33892528e8685f5b7",
-    transactionIndex: 117,
-    blockHash:
-      "0x6ccce353ac14e06cd7d40a3f09e758d482cfb213b627f098f6a5eb6b0c07172a",
-    logIndex: 68,
-    removed: false,
-    id: "log_104a0cd2",
-    returnValues: {
-      "0": "0x952B0C9Af8f8AA7C11E51384a9ec39500a9A17B1",
-      "1": "0xbf019d8D5Ec05dfF3A7173b1202e7699d7d7CEd0",
-      "2": "6348",
-      from: "0x952B0C9Af8f8AA7C11E51384a9ec39500a9A17B1",
-      to: "0xbf019d8D5Ec05dfF3A7173b1202e7699d7d7CEd0",
-      tokenId: "6348",
-    },
-    event: "Transfer",
-    signature:
-      "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
-    raw: {
-      data: "0x",
-      topics: [
-        "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
-        "0x000000000000000000000000952b0c9af8f8aa7c11e51384a9ec39500a9a17b1",
-        "0x000000000000000000000000bf019d8d5ec05dff3a7173b1202e7699d7d7ced0",
-        "0x00000000000000000000000000000000000000000000000000000000000018cc",
-      ],
-    },
-  };
+    event = {
+        address: "0x5Af0D9827E0c53E4799BB226655A1de152A425a5",
+        blockNumber: 14469305,
+        transactionHash: "0xcda8f36033e4412a64ef6ff6caa40c4df3795e385ff342d33892528e8685f5b7",
+        transactionIndex: 117,
+        blockHash: "0x6ccce353ac14e06cd7d40a3f09e758d482cfb213b627f098f6a5eb6b0c07172a",
+        logIndex: 68,
+        removed: false,
+        id: "log_104a0cd2",
+        returnValues: {
+            "0": "0x952B0C9Af8f8AA7C11E51384a9ec39500a9A17B1",
+            "1": "0xbf019d8D5Ec05dfF3A7173b1202e7699d7d7CEd0",
+            "2": "6348",
+            from: "0x952B0C9Af8f8AA7C11E51384a9ec39500a9A17B1",
+            to: "0xbf019d8D5Ec05dfF3A7173b1202e7699d7d7CEd0",
+            tokenId: "6348",
+        },
+        event: "Transfer",
+        signature: "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+        raw: {
+            data: "0x",
+            topics: [
+                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                "0x000000000000000000000000952b0c9af8f8aa7c11e51384a9ec39500a9a17b1",
+                "0x000000000000000000000000bf019d8d5ec05dff3a7173b1202e7699d7d7ced0",
+                "0x00000000000000000000000000000000000000000000000000000000000018cc",
+            ],
+        },
+    };
 
-  init = async () => {
-    // await this.transferCallback(this.event);
-    log.info("Adding contract event listener");
-    this.contract.events.Transfer(async (err: any, event: TransferEvent) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
+    init = async () => {
+        // await this.transferCallback(this.event);
+        log.info("Adding contract event listener");
+        this.contract.events.Transfer(async (err: any, event: TransferEvent) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
 
-      await this.transferCallback(event);
-    });
-  };
+            await this.transferCallback(event);
+        });
+    };
 }
