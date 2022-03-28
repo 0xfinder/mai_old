@@ -6,12 +6,12 @@ dotenv.config();
 const { TOKEN } = process.env;
 
 export const client = new Client({
-  intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS"],
-  commands: new Collection(),
+    intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS"],
+    commands: new Collection(),
 } as CustomClientOptions) as CustomClient;
 
 client.login(TOKEN);
 
-["command", "event"].forEach(handler => {
-  require(`./handlers/${handler}`)(client)             ;
+["command", "event"].forEach((handler) => {
+    require(`./handlers/${handler}`)(client);
 });
