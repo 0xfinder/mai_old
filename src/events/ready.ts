@@ -1,20 +1,26 @@
 import { Client } from "discord.js";
 import { Logger } from "tslog";
 
-module.exports = async (client: Client) => {
+export default async (client: Client): Promise<void> => {
     const log: Logger = new Logger();
-    log.info(`Logged in as ${client.user!.tag}!`);
+    client.on("ready", async () => {
+        if (!client.user || !client.application) {
+            return;
+        }
 
-    client.user!.setPresence({
-        activities: [
-            {
-                name: `with ${client.guilds.cache.size.toLocaleString()} Miladies`,
-                type: "PLAYING",
-            },
-        ],
-        status: "online",
+        log.info(`Logged in as ${client.user.tag}!`);
+
+        client.user.setPresence({
+            activities: [
+                {
+                    name: `with ${client.guilds.cache.size.toLocaleString()} Miladies`,
+                    type: "PLAYING",
+                },
+            ],
+            status: "online",
+        });
+
+        // Start services
+        await import("../start-manager");
     });
-
-    // Start services
-    await import("../start-manager");
 };

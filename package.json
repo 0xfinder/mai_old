@@ -12,8 +12,7 @@
         "watch-ts": "tsc -w",
         "eslint:lint": "eslint src/**/*.{ts}",
         "eslint:format": "eslint --fix src/**/*.{ts}",
-        "prettier:format": "prettier -c ./.prettierrc --write src/**/*.{ts,js,json,css,sass,scss,less,html,pug,md}",
-        "prepare": "husky install"
+        "prettier:format": "prettier -c ./.prettierrc --write src/**/*.{ts,js,json,css,sass,scss,less,html,pug,md}"
     },
     "dependencies": {
         "@alch/alchemy-web3": "^1.3.0",

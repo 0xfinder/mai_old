@@ -1,7 +1,7 @@
 import { readdirSync } from "fs";
 import { CustomClient } from "../types";
 
-module.exports = (client: CustomClient) => {
+export const CommandHandler = (client: CustomClient) => {
     readdirSync("./src/commands/").forEach(async (dir) => {
         const commands = readdirSync(`./src/commands/${dir}/`).filter((file) => file.endsWith(".ts"));
 
