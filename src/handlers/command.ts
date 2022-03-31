@@ -2,11 +2,11 @@ import { readdirSync } from "fs";
 import { CustomClient } from "../types";
 
 module.exports = (client: CustomClient) => {
-    readdirSync("./src/commands/").forEach((dir) => {
+    readdirSync("./src/commands/").forEach(async (dir) => {
         const commands = readdirSync(`./src/commands/${dir}/`).filter((file) => file.endsWith(".ts"));
 
         for (const file of commands) {
-            const pull = require(`../commands/${dir}/${file}`);
+            const pull = await import(`../commands/${dir}/${file}`);
 
             // if (pull.name) {
             client.commands.set(pull.name, pull);
