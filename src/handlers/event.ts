@@ -13,9 +13,9 @@ export const EventHandler = async (client: Client) => {
     for (const event of events) {
         let file = await import(`../events/${event}`);
         file = file.default;
-        eventToHandlerMap[event] = file;
-        file(client);
-        // client.on(event.split(".")[0], (...args) => file(client, ...args));
+        // eventToHandlerMap[event] = file;
+        // file(client);
+        client.on(event, (...args) => file(client, ...args));
         // client.on(event.split(".")[0], (...args) => file(client, ...args));
     }
 };
