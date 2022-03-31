@@ -1,7 +1,8 @@
 import { Client } from "discord.js";
-import { log } from "../services/index";
+import { Logger } from "tslog";
 
-module.exports = (client: Client) => {
+module.exports = async (client: Client) => {
+    const log: Logger = new Logger();
     log.info(`Logged in as ${client.user!.tag}!`);
 
     client.user!.setPresence({
@@ -15,5 +16,5 @@ module.exports = (client: Client) => {
     });
 
     // Start services
-    const manager = require("../start-manager");
+    await import("../start-manager");
 };

@@ -16,9 +16,7 @@ type TransferEvent = {
     address: string;
     blockNumber: number;
     transactionHash: string;
-    // transactionIndex: number;
     blockHash: string;
-    // logIndex: number;
     removed: boolean;
     id: string;
     returnValues: {
@@ -28,10 +26,6 @@ type TransferEvent = {
     };
     event: string;
     signature: string;
-    // raw: {
-    //   data: string;
-    //   topics: string[];
-    // };
 };
 
 // type Transaction = {
@@ -70,7 +64,7 @@ export class Alchemy {
     });
 
     // Milady token address
-    contractAddress: string = "0x5af0d9827e0c53e4799bb226655a1de152a425a5";
+    contractAddress = "0x5af0d9827e0c53e4799bb226655a1de152a425a5";
     contract = new this.web3.eth.Contract(abi as AbiItem[], this.contractAddress);
 
     transferCallback = async (event: TransferEvent) => {
@@ -185,36 +179,6 @@ export class Alchemy {
     */
         const txReceipt = await this.web3.eth.getTransactionReceipt(event.transactionHash);
         log.info("Transaction receipt: ", txReceipt);
-    };
-
-    event = {
-        address: "0x5Af0D9827E0c53E4799BB226655A1de152A425a5",
-        blockNumber: 14469305,
-        transactionHash: "0xcda8f36033e4412a64ef6ff6caa40c4df3795e385ff342d33892528e8685f5b7",
-        transactionIndex: 117,
-        blockHash: "0x6ccce353ac14e06cd7d40a3f09e758d482cfb213b627f098f6a5eb6b0c07172a",
-        logIndex: 68,
-        removed: false,
-        id: "log_104a0cd2",
-        returnValues: {
-            "0": "0x952B0C9Af8f8AA7C11E51384a9ec39500a9A17B1",
-            "1": "0xbf019d8D5Ec05dfF3A7173b1202e7699d7d7CEd0",
-            "2": "6348",
-            from: "0x952B0C9Af8f8AA7C11E51384a9ec39500a9A17B1",
-            to: "0xbf019d8D5Ec05dfF3A7173b1202e7699d7d7CEd0",
-            tokenId: "6348",
-        },
-        event: "Transfer",
-        signature: "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
-        raw: {
-            data: "0x",
-            topics: [
-                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
-                "0x000000000000000000000000952b0c9af8f8aa7c11e51384a9ec39500a9a17b1",
-                "0x000000000000000000000000bf019d8d5ec05dff3a7173b1202e7699d7d7ced0",
-                "0x00000000000000000000000000000000000000000000000000000000000018cc",
-            ],
-        },
     };
 
     init = async () => {
