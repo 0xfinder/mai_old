@@ -16,3 +16,6 @@ jobs:
 
             - name: Install npm dependencies
               run: yarn install
+
+            - name: Run TSC
+              run: yarn build

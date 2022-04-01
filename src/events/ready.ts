@@ -3,7 +3,6 @@ import { Logger } from "tslog";
 
 export default async (client: Client): Promise<void> => {
     const log: Logger = new Logger();
-    // client.on("ready", async () => {
     if (!client.user || !client.application) {
         return;
     }
@@ -13,8 +12,9 @@ export default async (client: Client): Promise<void> => {
     client.user.setPresence({
         activities: [
             {
-                name: `with ${client.guilds.cache.size.toLocaleString()} Miladies`,
-                type: "PLAYING",
+                name: `your mom`,
+                type: "STREAMING",
+                url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
             },
         ],
         status: "online",
@@ -22,5 +22,4 @@ export default async (client: Client): Promise<void> => {
 
     // Start services
     await import("../start-manager");
-    // });
 };

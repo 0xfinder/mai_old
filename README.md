@@ -6,10 +6,15 @@
 
 Installing from source:
 
-```
+```shell
 git clone https://github.com/0xfinder/mai
 cd mai
-yarn install
+yarn
+
+# build
+yarn build
+
+# start
 yarn start
 ```
 

@@ -1,7 +1,6 @@
 import { Client, Collection } from "discord.js";
 import { Logger } from "tslog";
-import { CustomClient, CustomClientOptions } from "./types";
-import { CommandHandler, EventHandler } from "./handlers/index";
+import { CustomClient, CustomClientOptions } from "@src/types";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -17,5 +16,8 @@ export const client = new Client({
 client.login(TOKEN);
 
 log.info("Loading handlers");
-CommandHandler(client);
-EventHandler(client);
+["command", "event"].forEach(async (handler) => {
+    let Handler = await import(`./handlers/${handler}`);
+    Handler = Handler.default;
+    Handler(client);
+});
