@@ -46,11 +46,11 @@ export class Alchemy {
 
         const nftMetadata = await getNftMetadata(this.contractAddress, event.returnValues.tokenId);
 
-        const imageURL = await getImageURL(nftMetadata);
+        const imageURL = getImageURL(nftMetadata);
 
         const data = generateEmbed(event, tx, imageURL);
 
-        log.info(postToWebhook(data));
+        postToWebhook(data);
     };
 
     init = async () => {
@@ -112,6 +112,5 @@ const getNftMetadata = async (tokenId: string, contractAddr: string, tokenType?:
 };
 
 const getImageURL = (nftMetadata: NftMetadata) => {
-    log.info(nftMetadata);
     return nftMetadata.metadata.image;
 };
