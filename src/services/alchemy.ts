@@ -32,13 +32,10 @@ type TransferEvent = {
 export class Alchemy {
     // client: CustomClient = client;
 
-    web3: AlchemyWeb3 = createAlchemyWeb3(
-        `wss://eth-mainnet.ws.alchemyapi.io/ws/${ALCHEMY_API_KEY}`,
-        {
-            retryInterval: 1000,
-            maxRetries: 25,
-        }
-    );
+    web3: AlchemyWeb3 = createAlchemyWeb3(`wss://eth-mainnet.ws.alchemyapi.io/ws/${ALCHEMY_API_KEY}`, {
+        retryInterval: 1000,
+        maxRetries: 25,
+    });
 
     // Milady token address
     contractAddress = "0x5af0d9827e0c53e4799bb226655a1de152a425a5";
@@ -87,9 +84,9 @@ const generateEmbed = (event: TransferEvent, transaction: Transaction, image?: s
         embeds: [
             {
                 title: "Transfer",
-                description: `${event.returnValues.from} transferred ${
-                    event.returnValues.tokenId
-                } to ${event.returnValues.to} **[${Number(transaction.value) / 1e18} ETH]**`,
+                description: `${event.returnValues.from} transferred ${event.returnValues.tokenId} to ${
+                    event.returnValues.to
+                } **[${Number(transaction.value) / 1e18} ETH]**`,
                 image: {
                     url: image,
                 },
@@ -99,11 +96,7 @@ const generateEmbed = (event: TransferEvent, transaction: Transaction, image?: s
     });
 };
 
-const getNftMetadata = async (
-    tokenId: string,
-    contractAddr: string,
-    tokenType?: string
-): Promise<NftMetadata> => {
+const getNftMetadata = async (tokenId: string, contractAddr: string, tokenType?: string): Promise<NftMetadata> => {
     const baseURL = `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}/getNFTMetadata`;
 
     tokenType = tokenType || "ERC721";

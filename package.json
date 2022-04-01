@@ -29,6 +29,8 @@
         "web3-utils": "^1.7.1"
     },
     "devDependencies": {
+        "@commitlint/cli": "^16.2.3",
+        "@commitlint/config-angular": "^16.2.3",
         "@types/jest": "^27.4.1",
         "@typescript-eslint/eslint-plugin": "^5.16.0",
         "@typescript-eslint/parser": "^5.16.0",
@@ -42,8 +44,37 @@
         "prettier": "^2.6.1"
     },
     "lint-staged": {
-        "./src/**/*.{ts,js,json,css,sass,scss,less,html,pug,md}": [
-            "prettier -c ./.prettierrc --write"
+        "*.ts": [
+            "eslint --fix"
+        ],
+        "*.{json,ts}": [
+            "prettier --write"
         ]
+    },
+    "commitlint": {
+        "extends": [
+            "@commitlint/config-angular"
+        ],
+        "rules": {
+            "type-enum": [
+                2,
+                "always",
+                [
+                    "chore",
+                    "build",
+                    "ci",
+                    "docs",
+                    "feat",
+                    "fix",
+                    "perf",
+                    "refactor",
+                    "revert",
+                    "style",
+                    "test",
+                    "types",
+                    "wip"
+                ]
+            ]
+        }
     }
 }
