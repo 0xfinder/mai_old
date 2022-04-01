@@ -66,7 +66,7 @@ export class Alchemy {
     };
 }
 
-const postToWebhook = async (data: string) => {
+export const postToWebhook = async (data: string) => {
     const config: AxiosRequestConfig = {
         method: "POST",
         url: DISCORD_WEBHOOK_URL,
@@ -96,8 +96,8 @@ const generateEmbed = (event: TransferEvent, transaction: Transaction, image?: s
     });
 };
 
-const getNftMetadata = async (tokenId: string, contractAddr: string, tokenType?: string): Promise<NftMetadata> => {
-    const baseURL = `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}/getNFTMetadata`;
+const getNftMetadata = async (contractAddr: string, tokenId: string, tokenType?: string): Promise<NftMetadata> => {
+    const baseURL = `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}/getNFTMetadata`;
 
     tokenType = tokenType || "ERC721";
     const config: AxiosRequestConfig = {

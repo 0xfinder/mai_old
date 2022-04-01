@@ -8,9 +8,9 @@
     "scripts": {
         "dev": "nodemon dist/index.js",
         "start": "node dist/index.js",
-        "build": "tsc",
+        "build": "ttsc",
         "postinstall": "tsc",
-        "watch-ts": "tsc -w",
+        "watch-ts": "ttsc -w",
         "eslint:lint": "eslint src/**/*.{ts}",
         "eslint:format": "eslint --fix src/**/*.{ts}",
         "prettier:format": "prettier -c ./.prettierrc --write src/**/*.{ts,js,json,css,sass,scss,less,html,pug,md}",
@@ -41,7 +41,10 @@
         "jest": "^27.5.1",
         "lint-staged": ">=10",
         "nodemon": "^2.0.15",
-        "prettier": "^2.6.1"
+        "prettier": "^2.6.1",
+        "ts-jest": "^27.1.4",
+        "ttypescript": "^1.5.13",
+        "typescript-transform-paths": "^3.3.1"
     },
     "lint-staged": {
         "*.ts": [
@@ -167,5 +170,11 @@
                 }
             }
         }
+    },
+    "jest": {
+        "testPathIgnorePatterns": [
+            "src/tests",
+            "dev"
+        ]
     }
 }
