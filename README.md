@@ -20,4 +20,5 @@ yarn start
 
 ### Features
 
+- NFT sales tracker (currently only supports 1 contract)
 - **WIP**
