@@ -91,6 +91,9 @@ const generateEmbed = (event: TransferEvent, transaction: Transaction, image?: s
                     url: image,
                 },
                 color: 16757575,
+                footer: {
+text: `Tx: ${event.transactionHash}`
+                }
             },
         ] as MessageEmbedOptions[],
     });
