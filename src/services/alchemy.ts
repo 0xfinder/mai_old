@@ -93,7 +93,8 @@ const generateEmbed = (event: TransferEvent, transaction: Transaction, image?: s
                 color: 16757575,
                 footer: {
 text: `Tx: ${event.transactionHash}`
-                }
+                },
+                timestamp: new Date()
             },
         ] as MessageEmbedOptions[],
     });
