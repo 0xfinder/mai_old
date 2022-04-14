@@ -84,6 +84,7 @@ const generateEmbed = (event: TransferEvent, transaction: Transaction, image?: s
         embeds: [
             {
                 title: "Transfer",
+                url: `https://etherscan.io/tx/${event.transactionHash}`,
                 description: `${event.returnValues.from} transferred ${event.returnValues.tokenId} to ${
                     event.returnValues.to
                 } **[${Number(transaction.value) / 1e18} ETH]**`,
@@ -91,6 +92,10 @@ const generateEmbed = (event: TransferEvent, transaction: Transaction, image?: s
                     url: image,
                 },
                 color: 16757575,
+                footer: {
+text: `Tx: ${event.transactionHash}`
+                },
+                timestamp: new Date()
             },
         ] as MessageEmbedOptions[],
     });
